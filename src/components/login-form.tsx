@@ -58,10 +58,10 @@ export function LoginForm({
                       </Link>
                     </DrawerTrigger>
                     <DrawerContent>
-                      <div className="w-80 max-w-sm">
+                      <div className="mx-auto w-full max-w-sm flex flex-col justify-center items-center pb-8 px-4">
                         <DrawerHeader>
-                          <DrawerTitle className="text-2xl font-light text-center">Forgot Password</DrawerTitle>
-                          <DrawerDescription>Easily Recovery your password by simply clicking?</DrawerDescription>
+                          <DrawerTitle className="text-3xl font-light text-center">Forgot Password</DrawerTitle>
+                          <DrawerDescription>No worries, we&apos;ll send you reset instructions.</DrawerDescription>
                         </DrawerHeader>
                         <ForgotPasswordPage />
                       </div>
@@ -76,7 +76,7 @@ export function LoginForm({
                 />
               </Field>
               <Field>
-                <Button type="submit" className="h-8">
+                <Button type="submit" className="h-8 bg-indigo-600 hover:bg-indigo-600 cursor-pointer">
                   Login
                 </Button>
               </Field>
