@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,17 +14,24 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
-  FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
 import { ForgotPasswordPage } from "@/app/(auth)/forgot-password/page";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+
+  const handleLogin = (e: React.FormEvent)=>{
+    e.preventDefault()
+    router.push('/dashboard');
+  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="p-4">
@@ -33,7 +42,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleLogin}>
             <FieldGroup>
               <Field className="space-y-0">
                 <FieldLabel htmlFor="email">Email</FieldLabel>
