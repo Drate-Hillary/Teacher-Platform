@@ -3,7 +3,6 @@
 import * as React from "react"
 
 import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import {
@@ -16,7 +15,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ComputerTerminalIcon, RoboticIcon, BookOpen02Icon, Settings05Icon, ChartRingIcon, SentIcon, CropIcon, PieChartIcon, MapsIcon, CommandIcon, MortarFreeIcons, Mortarboard01FreeIcons, Analytics02Icon, BookmarkAdd01Icon, BoardMathIcon, Quiz03Icon, ChartAnalysisIcon, LaptopPhoneSyncIcon, UserAccountIcon, CheckmarkSquare01Icon, ContentWritingIcon } from "@hugeicons/core-free-icons"
+import {  Mortarboard01FreeIcons, Analytics02Icon, BoardMathIcon, Quiz03Icon, ChartAnalysisIcon, LaptopPhoneSyncIcon, UserAccountIcon, CheckmarkSquare01Icon, ContentWritingIcon } from "@hugeicons/core-free-icons"
 import Link from "next/link"
 
 const data = {
@@ -36,7 +35,7 @@ const data = {
     },
     {
       title: "Classroom & Timetable",
-      url: "#",
+      url: "/virtual-classroom",
       icon: (
         <HugeiconsIcon icon={BoardMathIcon} strokeWidth={2} />
       ),
