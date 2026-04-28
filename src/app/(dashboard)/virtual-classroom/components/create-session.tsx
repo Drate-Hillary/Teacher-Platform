@@ -38,7 +38,7 @@ const sessionSchema = z.object({
   platform: z.enum(['zoom', 'google-meet', 'microsoft-teams']),
   course: z.string().min(1, 'Course is required'),
   class: z.string().min(1, 'Class is required'),
-  notifyStudents: z.boolean().default(true),
+  notifyStudents: z.boolean(), // FIX 1: Removed .default(true) to fix the TypeScript union error
   meetingLink: z.string().url('Please enter a valid URL').optional(),
 });
 
@@ -70,10 +70,11 @@ export default function CreateSessionDialog({ open, onOpenChange }: CreateSessio
 
   const selectedPlatform = watch('platform');
 
+  // FIX 2: Passed the raw icon data instead of rendered <HugeiconsIcon /> components
   const platforms = [
-    { value: 'zoom', label: 'Zoom', icon: <HugeiconsIcon icon={CameraVideoIcon} />, color: 'text-blue-600' },
-    { value: 'google-meet', label: 'Google Meet', icon: <HugeiconsIcon icon={CameraVideoIcon} />, color: 'text-green-600' },
-    { value: 'microsoft-teams', label: 'Microsoft Teams', icon: <HugeiconsIcon icon={CameraVideoIcon} />, color: 'text-purple-600' },
+    { value: 'zoom', label: 'Zoom', icon: CameraVideoIcon, color: 'text-blue-600' },
+    { value: 'google-meet', label: 'Google Meet', icon: CameraVideoIcon, color: 'text-green-600' },
+    { value: 'microsoft-teams', label: 'Microsoft Teams', icon: CameraVideoIcon, color: 'text-purple-600' },
   ];
 
   const courses = [
@@ -158,7 +159,7 @@ export default function CreateSessionDialog({ open, onOpenChange }: CreateSessio
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-100 max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <HugeiconsIcon icon={CameraVideoIcon} />
@@ -313,7 +314,7 @@ export default function CreateSessionDialog({ open, onOpenChange }: CreateSessio
                     key={platform.value}
                     type="button"
                     onClick={() => {
-                      setValue('platform', platform.value);
+                      setValue('platform', platform.value as "zoom" | "google-meet" | "microsoft-teams");
                       setValue('meetingLink', '');
                     }}
                     className={`p-4 rounded-lg border-2 text-center transition-all ${

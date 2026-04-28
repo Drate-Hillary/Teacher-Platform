@@ -3,12 +3,13 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Plus, Calendar, Video, Clock, Users } from 'lucide-react';
 import SessionList from './components/SessionList';
-import CreateSessionDialog from './components/CreateSessionDialog';
+import CreateSessionDialog from './components/create-session';
 import SessionCalendar from './components/SessionCalendar';
-import RecordingsList from './components/RecordingsList';
-import { SessionProvider } from '../../../context/SessionContext';
+import RecordingsList from './components/RecordingList';
+import { SessionProvider } from '@/context/session_context'
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Calendar01Icon, CameraVideoIcon, Chart02Icon, Time04Icon, UserGroupIcon } from '@hugeicons/core-free-icons';
 
 export default function VirtualClassroomClient() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -16,22 +17,21 @@ export default function VirtualClassroomClient() {
 
   return (
     <SessionProvider>
-      <div className="space-y-6">
+      <div className="space-y-6 p-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Virtual Classroom</h1>
-            <p className="text-sm text-gray-600 mt-1">
+            <h1 className="text-2xl font-bold text-black">Virtual Classroom & Scheduling</h1>
+            <p className="text-sm text-gray-600 mt-0.5">
               Manage your online sessions, meetings, and recordings
             </p>
           </div>
           <div className="flex items-center gap-3">
             <Button variant="outline" size="sm">
-              <Calendar className="h-4 w-4 mr-2" />
+              <HugeiconsIcon icon={Calendar01Icon} className="h-4 w-4 mr-2" />
               Calendar View
             </Button>
             <Button onClick={() => setShowCreateDialog(true)} size="sm">
-              <Plus className="h-4 w-4 mr-2" />
               Create Session
             </Button>
           </div>
@@ -43,28 +43,28 @@ export default function VirtualClassroomClient() {
             {
               label: 'Today\'s Sessions',
               value: '3',
-              icon: Video,
+              icon: <HugeiconsIcon icon={CameraVideoIcon} />,
               color: 'text-blue-600',
               bg: 'bg-blue-50',
             },
             {
               label: 'This Week',
               value: '12',
-              icon: Calendar,
+              icon: <HugeiconsIcon icon={Calendar01Icon} />,
               color: 'text-green-600',
               bg: 'bg-green-50',
             },
             {
               label: 'Total Hours',
               value: '24.5',
-              icon: Clock,
+              icon: <HugeiconsIcon icon={Time04Icon} />,
               color: 'text-purple-600',
               bg: 'bg-purple-50',
             },
             {
               label: 'Participants',
               value: '245',
-              icon: Users,
+              icon: <HugeiconsIcon icon={UserGroupIcon} />,
               color: 'text-orange-600',
               bg: 'bg-orange-50',
             },
@@ -72,7 +72,7 @@ export default function VirtualClassroomClient() {
             <div key={stat.label} className="bg-white rounded-xl border p-4">
               <div className="flex items-center gap-3">
                 <div className={`p-2 rounded-lg ${stat.bg}`}>
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                  <HugeiconsIcon icon={Chart02Icon} className={`h-5 w-5 ${stat.color}`} />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900">{stat.value}</p>

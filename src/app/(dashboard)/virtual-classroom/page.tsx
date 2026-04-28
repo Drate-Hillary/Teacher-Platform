@@ -1,5 +1,7 @@
+import VirtualClassroomClient from "./virtual-client";
+
 export default function VirtualClassroomPage(){
     return(
-        <h1>Virtual Class room</h1>
+        <VirtualClassroomClient />
     );
 }
