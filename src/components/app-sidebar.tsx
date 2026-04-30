@@ -42,7 +42,7 @@ const data = {
     },
     {
       title: "Examinations",
-      url: "#",
+      url: "/examinations",
       icon: (
         <HugeiconsIcon icon={Quiz03Icon} strokeWidth={2} />
       ),
