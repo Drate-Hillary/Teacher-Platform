@@ -14,6 +14,8 @@ import { Separator } from '@/components/ui/separator';
 import { ExamConfiguration } from '@/context/AssessmentContext';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Clock02Icon, ShuffleIcon, ViewIcon } from '@hugeicons/core-free-icons';
+import SingleCalendar from '@/components/SingleCalendar'; // Import the new calendar component
+import { format } from 'date-fns';
 
 interface ExamConfiguratorProps {
   configuration: ExamConfiguration;
@@ -32,15 +34,20 @@ export default function ExamConfigurator({ configuration, onChange }: ExamConfig
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
+        <div className="space-y-2 flex flex-col">
           <Label>Start Date</Label>
-          <Input
-            type="date"
-            value={configuration.startDate}
-            onChange={(e) => onChange({ ...configuration, startDate: e.target.value })}
+          <SingleCalendar
+            date={configuration.startDate}
+            onDateChange={(date) => 
+              onChange({ 
+                ...configuration, 
+                // Format back to YYYY-MM-DD to maintain compatibility with your original state
+                startDate: date ? format(date, 'yyyy-MM-dd') : '' 
+              })
+            }
           />
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 flex flex-col">
           <Label>Start Time</Label>
           <Input
             type="time"
@@ -48,15 +55,19 @@ export default function ExamConfigurator({ configuration, onChange }: ExamConfig
             onChange={(e) => onChange({ ...configuration, startTime: e.target.value })}
           />
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 flex flex-col">
           <Label>End Date</Label>
-          <Input
-            type="date"
-            value={configuration.endDate}
-            onChange={(e) => onChange({ ...configuration, endDate: e.target.value })}
+          <SingleCalendar
+            date={configuration.endDate}
+            onDateChange={(date) => 
+              onChange({ 
+                ...configuration, 
+                endDate: date ? format(date, 'yyyy-MM-dd') : '' 
+              })
+            }
           />
         </div>
-        <div className="space-y-2">
+        <div className="space-y-2 flex flex-col">
           <Label>End Time</Label>
           <Input
             type="time"

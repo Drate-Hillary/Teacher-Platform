@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Controller, useForm } from "react-hook-form";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +26,7 @@ import { useAssessment, Rubric } from '@/context/AssessmentContext';
 import RubricBuilder from './RubricBuilder';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Cancel, FileIcon, PercentIcon, Upload } from '@hugeicons/core-free-icons';
+import SingleCalendar from '@/components/SingleCalendar';
 
 interface CreateAssignmentProps {
   open: boolean;
@@ -33,6 +35,7 @@ interface CreateAssignmentProps {
 
 export default function CreateAssignment({ open, onOpenChange }: CreateAssignmentProps) {
   const { createAssignment } = useAssessment();
+  const {control} = useForm();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [course, setCourse] = useState('');
@@ -83,7 +86,7 @@ export default function CreateAssignment({ open, onOpenChange }: CreateAssignmen
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] no-scrollbar overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Create Assignment</DialogTitle>
           <DialogDescription>
@@ -153,11 +156,18 @@ export default function CreateAssignment({ open, onOpenChange }: CreateAssignmen
             {/* Due Date & Late Policy */}
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Due Date</Label>
-                <Input
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
+                <Label htmlFor='dueDate'>Due Date</Label>
+                <Controller
+                  control={control} // Make sure to destructure 'control' from useForm()
+                  name="dueDate"
+                  render={({ field }) => (
+                    <SingleCalendar
+                      date={field.value}
+                      onDateChange={(date) => {
+                        field.onChange(date ? date.toISOString() : "");
+                      }}
+                    />
+                  )}
                 />
               </div>
 

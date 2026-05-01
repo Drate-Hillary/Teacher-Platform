@@ -1,42 +1,52 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { useAssessment } from '@/context/AssessmentContext';
-import { HugeiconsIcon } from '@hugeicons/react';
-import { Cancel01Icon, CheckSquare, EncryptIcon, File01Icon, LockKeyIcon, Upload01Icon, UploadIcon, ViewIcon } from '@hugeicons/core-free-icons';
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { useAssessment } from "@/context/AssessmentContext";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Cancel01Icon,
+  CheckSquare,
+  EncryptIcon,
+  File01Icon,
+  LockKeyIcon,
+  Upload01Icon,
+  UploadIcon,
+  ViewIcon,
+} from "@hugeicons/core-free-icons";
+import SingleCalendar from "@/components/SingleCalendar";
 
 const examSchema = z.object({
-  title: z.string().min(3, 'Title is required'),
-  description: z.string().min(10, 'Description is required'),
-  type: z.enum(['final', 'midterm', 'quiz', 'worksheet']),
-  course: z.string().min(1, 'Course is required'),
-  class: z.string().min(1, 'Class is required'),
-  totalMarks: z.number().min(1, 'Total marks required'),
-  dueDate: z.string().min(1, 'Due date is required'),
+  title: z.string().min(3, "Title is required"),
+  description: z.string().min(10, "Description is required"),
+  type: z.enum(["final", "midterm", "quiz", "worksheet"]),
+  course: z.string().min(1, "Course is required"),
+  class: z.string().min(1, "Class is required"),
+  totalMarks: z.number().min(1, "Total marks required"),
+  dueDate: z.string().min(1, "Due date is required"),
   instructions: z.string().optional(),
 });
 
@@ -48,7 +58,10 @@ interface UploadOfflineExamProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineExamProps) {
+export default function UploadOfflineExam({
+  open,
+  onOpenChange,
+}: UploadOfflineExamProps) {
   const { createOfflineExam } = useAssessment();
   const [uploadedFile, setUploadedFile] = useState<{
     name: string;
@@ -62,13 +75,14 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isSubmitting },
     reset,
     setValue,
   } = useForm<ExamFormData>({
     resolver: zodResolver(examSchema),
     defaultValues: {
-      type: 'quiz',
+      type: "quiz",
     },
   });
 
@@ -77,20 +91,20 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
     if (!file) return;
 
     setUploading(true);
-    
+
     // Simulate upload progress
     for (let i = 0; i <= 100; i += 20) {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 300));
       setUploadProgress(i);
     }
 
     setUploadedFile({
       name: file.name,
-      size: (file.size / (1024 * 1024)).toFixed(2) + ' MB',
+      size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
       type: file.type,
       url: URL.createObjectURL(file),
     });
-    
+
     setUploading(false);
     setUploadProgress(0);
   };
@@ -105,9 +119,9 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
       fileUrl: uploadedFile.url,
       fileName: uploadedFile.name,
       fileSize: uploadedFile.size,
-      fileType: uploadedFile.type.includes('pdf') ? 'pdf' : 'doc',
-      status: 'draft',
-      instructions: data.instructions || ''
+      fileType: uploadedFile.type.includes("pdf") ? "pdf" : "doc",
+      status: "draft",
+      instructions: data.instructions || "",
     });
 
     reset();
@@ -116,24 +130,19 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
   };
 
   const courses = [
-    'Advanced Mathematics',
-    'Physics Lab',
-    'Computer Science',
-    'Statistics',
-    'Chemistry',
-    'Biology',
+    "Advanced Mathematics",
+    "Physics Lab",
+    "Computer Science",
+    "Statistics",
+    "Chemistry",
+    "Biology",
   ];
 
-  const classes = [
-    'Grade 11-A',
-    'Grade 11-B',
-    'Grade 12-A',
-    'Grade 12-B',
-  ];
+  const classes = ["Grade 11-A", "Grade 11-B", "Grade 12-A", "Grade 12-B"];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] no-scrollbar overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <HugeiconsIcon icon={UploadIcon} className="h-5 w-5" />
@@ -157,10 +166,16 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
                 <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <div className="p-3 bg-blue-50 rounded-full mb-3">
-                      <HugeiconsIcon icon={Upload01Icon} className="h-6 w-6 text-blue-600" />
+                      <HugeiconsIcon
+                        icon={Upload01Icon}
+                        className="h-6 w-6 text-blue-600"
+                      />
                     </div>
                     <p className="text-sm text-gray-600">
-                      <span className="font-medium text-blue-600">Click to upload</span> or drag and drop
+                      <span className="font-medium text-blue-600">
+                        Click to upload
+                      </span>{" "}
+                      or drag and drop
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
                       PDF or Word documents (Max 25MB)
@@ -179,15 +194,26 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-50 rounded-lg">
-                      <HugeiconsIcon icon={File01Icon} className="h-6 w-6 text-blue-600" />
+                      <HugeiconsIcon
+                        icon={File01Icon}
+                        className="h-6 w-6 text-blue-600"
+                      />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{uploadedFile.name}</p>
-                      <p className="text-xs text-gray-500">{uploadedFile.size}</p>
+                      <p className="text-sm font-medium text-gray-900">
+                        {uploadedFile.name}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {uploadedFile.size}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm" onClick={() => window.open(uploadedFile.url)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(uploadedFile.url)}
+                    >
                       <HugeiconsIcon icon={ViewIcon} className="h-4 w-4 mr-1" />
                       Preview
                     </Button>
@@ -204,7 +230,10 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
                   <HugeiconsIcon icon={CheckSquare} className="h-4 w-4" />
                   File uploaded successfully
                   <Badge variant="secondary" className="ml-2">
-                    <HugeiconsIcon icon={EncryptIcon} className="h-3 w-3 mr-1" />
+                    <HugeiconsIcon
+                      icon={EncryptIcon}
+                      className="h-3 w-3 mr-1"
+                    />
                     Encrypted
                   </Badge>
                 </div>
@@ -226,17 +255,21 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
 
           {/* Exam Details */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-gray-900">Exam Details</h3>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Exam Details
+            </h3>
 
             <div className="space-y-2">
               <Label htmlFor="title">Exam Title *</Label>
               <Input
                 id="title"
                 placeholder="e.g., Advanced Mathematics Final Exam"
-                {...register('title')}
-                className={errors.title ? 'border-red-500' : ''}
+                {...register("title")}
+                className={errors.title ? "border-red-500" : ""}
               />
-              {errors.title && <p className="text-sm text-red-500">{errors.title.message}</p>}
+              {errors.title && (
+                <p className="text-sm text-red-500">{errors.title.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -245,17 +278,21 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
                 id="description"
                 placeholder="Describe the exam content and coverage..."
                 rows={3}
-                {...register('description')}
-                className={errors.description ? 'border-red-500' : ''}
+                {...register("description")}
+                className={errors.description ? "border-red-500" : ""}
               />
-              {errors.description && <p className="text-sm text-red-500">{errors.description.message}</p>}
+              {errors.description && (
+                <p className="text-sm text-red-500">
+                  {errors.description.message}
+                </p>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Exam Type *</Label>
+                <Label>Exam Type</Label>
                 <Select
-                  onValueChange={(value) => setValue('type', value as ExamType)}
+                  onValueChange={(value) => setValue("type", value as ExamType)}
                   defaultValue="quiz"
                 >
                   <SelectTrigger>
@@ -271,57 +308,79 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="totalMarks">Total Marks *</Label>
+                <Label htmlFor="totalMarks">Total Marks</Label>
                 <Input
                   id="totalMarks"
                   type="number"
                   placeholder="100"
-                  {...register('totalMarks', { valueAsNumber: true })}
-                  className={errors.totalMarks ? 'border-red-500' : ''}
+                  {...register("totalMarks", { valueAsNumber: true })}
+                  className={errors.totalMarks ? "border-red-500" : ""}
                 />
-                {errors.totalMarks && <p className="text-sm text-red-500">{errors.totalMarks.message}</p>}
+                {errors.totalMarks && (
+                  <p className="text-sm text-red-500">
+                    {errors.totalMarks.message}
+                  </p>
+                )}
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Course *</Label>
-                <Select onValueChange={(value) => setValue('course', value)}>
+                <Select onValueChange={(value) => setValue("course", value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select course" />
                   </SelectTrigger>
                   <SelectContent>
-                    {courses.map(course => (
-                      <SelectItem key={course} value={course}>{course}</SelectItem>
+                    {courses.map((course) => (
+                      <SelectItem key={course} value={course}>
+                        {course}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label>Class *</Label>
-                <Select onValueChange={(value) => setValue('class', value)}>
+                <Label>Class</Label>
+                <Select onValueChange={(value) => setValue("class", value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select class" />
                   </SelectTrigger>
                   <SelectContent>
-                    {classes.map(cls => (
-                      <SelectItem key={cls} value={cls}>{cls}</SelectItem>
+                    {classes.map((cls) => (
+                      <SelectItem key={cls} value={cls}>
+                        {cls}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="dueDate">Due Date *</Label>
-              <Input
-                id="dueDate"
-                type="date"
-                {...register('dueDate')}
-                className={errors.dueDate ? 'border-red-500' : ''}
-              />
-              {errors.dueDate && <p className="text-sm text-red-500">{errors.dueDate.message}</p>}
+              <div className="space-y-2 flex flex-col">
+                <Label htmlFor="dueDate">Due Date</Label>
+
+                {/* Replace register with Controller for custom shadcn components */}
+                <Controller
+                  control={control} // Make sure to destructure 'control' from useForm()
+                  name="dueDate"
+                  render={({ field }) => (
+                    <SingleCalendar
+                      date={field.value}
+                      onDateChange={(date) => {
+                        field.onChange(date ? date.toISOString() : "");
+                      }}
+                      hasError={!!errors.dueDate}
+                    />
+                  )}
+                />
+
+                {errors.dueDate && (
+                  <p className="text-sm text-red-500">
+                    {errors.dueDate.message}
+                  </p>
+                )}
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -330,7 +389,7 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
                 id="instructions"
                 placeholder="Special instructions for students..."
                 rows={2}
-                {...register('instructions')}
+                {...register("instructions")}
               />
             </div>
           </div>
@@ -340,13 +399,17 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
           {/* Security Notice */}
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <div className="flex gap-3">
-              <HugeiconsIcon icon={LockKeyIcon} className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5" />
+              <HugeiconsIcon
+                icon={LockKeyIcon}
+                className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5"
+              />
               <div className="text-sm text-yellow-800">
                 <p className="font-medium">Security Notice</p>
                 <p className="mt-1">
-                  Uploaded documents will be encrypted and stored securely. 
-                  Only authorized teachers and administrators will have access.
-                  Download links will be automatically generated for approved students.
+                  Uploaded documents will be encrypted and stored securely. Only
+                  authorized teachers and administrators will have access.
+                  Download links will be automatically generated for approved
+                  students.
                 </p>
               </div>
             </div>
@@ -354,11 +417,15 @@ export default function UploadOfflineExam({ open, onOpenChange }: UploadOfflineE
 
           {/* Form Actions */}
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || !uploadedFile}>
-              {isSubmitting ? 'Uploading...' : 'Upload Exam'}
+              {isSubmitting ? "Uploading..." : "Upload Exam"}
             </Button>
           </div>
         </form>

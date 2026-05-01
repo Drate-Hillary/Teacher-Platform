@@ -49,7 +49,7 @@ const data = {
     },
     {
       title: "Grading",
-      url: "#",
+      url: "/grading",
       icon: (
         <HugeiconsIcon icon={ChartAnalysisIcon} strokeWidth={2} />
       ),

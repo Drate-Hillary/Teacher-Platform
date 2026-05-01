@@ -127,7 +127,7 @@ export default function QuizBuilder({ open, onOpenChange }: QuizBuilderProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] no-scrollbar overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <HugeiconsIcon icon={PlayIcon} className="h-5 w-5" />
